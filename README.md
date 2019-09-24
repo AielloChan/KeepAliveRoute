@@ -1,6 +1,6 @@
 # KeepAliveRoute
 
-React keep alive route implemented css display none
+React keep alive route implemented by css display none
 
 ## Use
 
