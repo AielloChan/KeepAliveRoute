@@ -5,6 +5,8 @@ interface KeepAliveRouteProps extends RouteProps {
   keepAlive: boolean
 }
 
+let cached = false
+
 const KeepAliveRoute = ({
   keepAlive = true,
   component: Component,
@@ -12,24 +14,29 @@ const KeepAliveRoute = ({
 }: KeepAliveRouteProps) => {
   if (keepAlive) {
     const matched = matchPath(window.location.pathname, rest)
-    return (
-      <Route
-        {...rest}
-        path="/"
-        render={props => {
-          return (
-            <div
-              style={{
-                display: matched ? 'block' : 'none',
-              }}
-            >
-              {Component && <Component {...props} />}
-            </div>
-          )
-        }}
-      />
-    )
+    if (matched || cached) {
+      cached = true
+      return (
+        <Route
+          {...rest}
+          path="/"
+          render={props => {
+            return (
+              <div
+                style={{
+                  display: matched ? 'block' : 'none',
+                }}
+              >
+                {Component && <Component {...props} />}
+              </div>
+            )
+          }}
+        />
+      )
+    }
+    return <i />
   }
+  cached = false
   return <Route {...rest} component={Component} />
 }
 
